@@ -2,7 +2,24 @@
 
 [![Build Status](https://travis-ci.org/canjs/can-event-dom-enter.svg?branch=master)](https://travis-ci.org/canjs/can-event-dom-enter)
 
-A custom event for listening to changes of inputs with type "radio", which fires when a conflicting radio input changes. A "conflicting" radio button has the same "name" attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The "change" event does not fire for deselected radios. By using this event instead, deselected radios receive notification.
+Watch for enter keys presses on a DomEventTarget.
+
+```js
+var domEvents = require('can-dom-events');
+var enterEvent = require('can-event-dom-enter');
+
+// add the enter event to the global event registry
+domEvents.addEvent(enterEvent);
+
+var input = document.createElement('input');
+function enterEventHandler() {
+	console.log('enter key pressed');
+}
+
+domEvents.addEventHandler(input, 'enter', enterEventHandler);
+// User hits enter key in input
+// => *enter key pressed*
+```
 
 ## Usage
 
@@ -11,9 +28,9 @@ A custom event for listening to changes of inputs with type "radio", which fires
 With StealJS, you can import this module directly in an auto-rendered template:
 
 ```js
-import radioChange from 'can-event-dom-enter';
-import domEvents from 'can-util/dom/events';
-domEvents.addCustomEvent(radioChange);
+import enter from 'can-event-dom-enter';
+import domEvents from 'can-dom-events';
+domEvents.addEvent(enter);
 ```
 
 ### CommonJS use
@@ -22,9 +39,9 @@ Use `require` to load `can-event-dom-enter` and everything else
 needed to create a template that uses `can-event-dom-enter`:
 
 ```js
-var radioChange = require("can-event-dom-enter");
-var domEvents = require('can-util/dom/events');
-domEvents.addCustomEvent(radioChange);
+var enter = require("can-event-dom-enter");
+var domEvents = require('can-dom-events');
+domEvents.addEvent(enter);
 ```
 
 ### Standalone use

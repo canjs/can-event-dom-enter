@@ -36,18 +36,22 @@ function disassociateHandler (target, eventType, handler) {
  * Watch for when enter keys are pressed on a DomEventTarget.
  *
  * ```js
- * var events = require("can-util/dom/events/events");
- * var input = document.createElement("input");
+ * var domEvents = require('can-dom-events');
+ * var enterEvent = require('can-event-dom-enter');
  *
+ * domEvents.addEvent(enterEvent);
+ *
+ * var input = document.createElement('input');
  * function enterEventHandler() {
- * 	console.log("enter key pressed");
+ * 	console.log('enter key pressed');
  * }
  *
- * events.addEventHandler.call(input, "enter", enterEventHandler);
- * events.dispatch.call(input, {
+ * domEvents.addEventHandler(input, 'enter', enterEventHandler);
+ * domEvents.dispatch(input, {
  *   type: 'keyup',
  *   keyCode: keyCode
  * });
+ * ```
  */
 module.exports = {
 	defaultEventType: 'enter',
