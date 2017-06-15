@@ -1,0 +1,23 @@
+language: node_js
+node_js: node
+before_install:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- npm i -g greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
+matrix:
+  include:
+  - env: INSTALL_TYPE="locked"
+  - env: INSTALL_TYPE="canary"
+install: npm run install-$INSTALL_TYPE
+addons:
+  firefox: '51.0'
+deploy:
+  provider: npm
+  email: core@donejs.com
+  api_key:
+    secure: SDjQREqfI2RZwxlQ/4fmpsDN4sHADWXZmAqCnDZqxrnNgJGZE1gkgnVUM2bI3D5yKFWU+OQU+tUIYiJ48SmAJFf2pkjhPjsFSFgyOkB/156wCNfkU2GV3ri6n1qBmsXDPIrOt+S5Qw+yrP4HYJvI8FbPpjCnTuhPCZ6Abu8AmPpmR51tpCiUisuRGTIMK9pWfwdelRWi0WeHWn6kNb13BjxJpM0fwQ0IyqAqsHIKEukGIhhFx+FcZu6GnqUGhF7FG+9Q2msahrPzcffWzSzmOthS36/nIh3dP4B8h9MejsTTyre4wGSbJZSWX5+5ihWFWAea1yAp5Doke+m5EWNqzWaTtg6wLit4LkiM8yeLFIQU9tWbpqnDlOQIMRB1oPEcf+e3y/OYJCpURPGx8psMOzw05WrYjn19MQXySdVA57eyTDbHmgV6yvl1Ju5n3riHMbi3lqu4ZgRIpOJQcZf26XvvbGWWSkAC3aNb10+zr6bVsFTBAS8vhnRzIGUCvynnIoGdo1Dc/kWtaS+avX+piiXCNcFqirFs38Gtxxw34kLGRjRozhFgBZ8GOgGOpQJfarxLdAt7tZ5Kn0WxIOeE//h/itxIIWmX6iHHz8IwLZsDUgRJ+/jWhw6XnwdD4irRPJjrvWZfs/M6vw36ytWCKQmCQo1bvBLhw1+KRcJEF3A=
+  on:
+    tags: true
+    repo: canjs/can-event-dom-enter
