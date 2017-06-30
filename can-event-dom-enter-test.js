@@ -194,3 +194,22 @@ function runTests (mod) {
 }
 
 suites.forEach(runTests);
+
+unit.module("can-event-dom-enter plain");
+
+unit.test("can use custom addEventListener", function(assert){
+	assert.expect(2);
+	var handler = function(){};
+	var button = document.createElement("button");
+	definition.addEventListener.call({
+		addEventListener: function(){
+			assert.ok(true, "called on custom eventListener");
+		}
+	},button,"enter", handler);
+
+	definition.removeEventListener.call({
+		removeEventListener: function(){
+			assert.ok(true, "called on custom eventListener");
+		}
+	},button,"enter", handler);
+});

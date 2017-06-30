@@ -64,13 +64,13 @@ module.exports = {
 		};
 
 		associateHandler(target, eventType, handler, keyHandler);
-		target.addEventListener(baseEventType, keyHandler);
+		this.addEventListener(target, baseEventType, keyHandler);
 	},
 
 	removeEventListener: function (target, eventType, handler) {
 		var keyHandler = disassociateHandler(target, eventType, handler);
 		if (keyHandler) {
-			target.removeEventListener(baseEventType, keyHandler);
+			this.removeEventListener(target,baseEventType, keyHandler);
 		}
 	}
 };
