@@ -32,6 +32,7 @@ function disassociateHandler (target, eventType, handler) {
 /**
  * @module {events} can-event-dom-enter
  * @parent can-infrastructure
+ * @package ./package.json
  *
  * Watch for when enter keys are pressed on a DomEventTarget.
  *
