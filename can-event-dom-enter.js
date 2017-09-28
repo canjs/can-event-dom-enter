@@ -1,7 +1,7 @@
 'use strict';
 
-var domData = require('can-util/dom/data/data');
-var getCid = require("can-util/js/cid/get-cid");
+var domData = require('can-dom-data-state');
+var canCid = require("can-cid");
 
 var baseEventType = 'keyup';
 
@@ -12,7 +12,7 @@ function isEnterEvent (event) {
 }
 
 function getHandlerKey (eventType, handler) {
-	return eventType + ':' + getCid(handler);
+	return eventType + ':' + canCid(handler);
 }
 
 function associateHandler (target, eventType, handler, otherHandler) {
