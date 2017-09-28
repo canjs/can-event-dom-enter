@@ -11,8 +11,9 @@
     "url": "https://github.com/canjs/can-event-dom-enter/issues"
   },
   "dependencies": {
-    "can-dom-events": "^1.0.2",
-    "can-util": "^3.8.4"
+    "can-cid": "^1.1.0",
+    "can-dom-data-state": "^0.1.0",
+    "can-dom-events": "^1.0.2"
   },
   "devDependencies": {
     "fixpack": "^2.3.1",
