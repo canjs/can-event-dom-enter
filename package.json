@@ -11,9 +11,9 @@
     "url": "https://github.com/canjs/can-event-dom-enter/issues"
   },
   "dependencies": {
-    "can-cid": "^1.1.0",
     "can-dom-data-state": "^0.1.0",
-    "can-dom-events": "^1.0.2"
+    "can-dom-events": "^1.0.2",
+    "can-util": "^3.10.12"
   },
   "devDependencies": {
     "detect-cyclic-packages": "^1.1.0",
@@ -39,14 +39,14 @@
   },
   "scripts": {
     "build": "node build.js",
+    "detect-cycle": "detect-cyclic-packages --ignore done-serve",
     "install-canary": "npm install --no-shrinkwrap",
     "install-locked": "npm install",
     "jshint": "jshint ./*.js --config",
     "lint": "fixpack && npm run jshint",
     "preversion": "npm test && npm run build",
     "test": "npm run detect-cycle && npm run lint && npm run testee",
-    "testee": "testee test.html --browsers firefox",
-    "detect-cycle": "detect-cyclic-packages --ignore done-serve"
+    "testee": "testee test.html --browsers firefox"
   },
   "steal": {
     "main": "can-event-dom-enter",
