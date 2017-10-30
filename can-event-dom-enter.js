@@ -1,7 +1,7 @@
 'use strict';
 
 var domData = require('can-dom-data-state');
-var canCid = require("can-cid");
+var singleReference = require('can-util/js/single-reference/single-reference')
 
 var baseEventType = 'keyup';
 
@@ -9,24 +9,6 @@ function isEnterEvent (event) {
 	var hasEnterKey = event.key === 'Enter';
 	var hasEnterCode = event.keyCode === 13;
 	return hasEnterKey || hasEnterCode;
-}
-
-function getHandlerKey (eventType, handler) {
-	return eventType + ':' + canCid(handler);
-}
-
-function associateHandler (target, eventType, handler, otherHandler) {
-	var key = getHandlerKey(eventType, handler);
-	domData.set.call(target, key, otherHandler);
-}
-
-function disassociateHandler (target, eventType, handler) {
-	var key = getHandlerKey(eventType, handler);
-	var otherHandler = domData.get.call(target, key);
-	if (otherHandler) {
-		domData.clean.call(target, key);
-	}
-	return otherHandler;
 }
 
 /**
@@ -65,12 +47,12 @@ module.exports = {
 			}
 		};
 
-		associateHandler(target, eventType, handler, keyHandler);
+		singleReference.set(target, eventType, handler, keyHandler);
 		this.addEventListener(target, baseEventType, keyHandler);
 	},
 
 	removeEventListener: function (target, eventType, handler) {
-		var keyHandler = disassociateHandler(target, eventType, handler);
+		var keyHandler = singleReference.getAndDelete(target, eventType, handler);
 		if (keyHandler) {
 			this.removeEventListener(target,baseEventType, keyHandler);
 		}
