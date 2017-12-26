@@ -4,6 +4,7 @@ var unit = require('steal-qunit');
 var domEvents = require('can-dom-events');
 var definition = require('./can-event-dom-enter');
 var compat = require('./compat');
+var enterEventType = 'enter';
 
 function makeEnterEvent() {
 	try {
@@ -55,7 +56,7 @@ var compatWithNew = {
 	name: 'compat with can-dom-events',
 	domEvents: domEvents,
 	setup: function () {
-		this.removeEvent = compat(domEvents);
+		this.removeEvent = compat(domEvents, enterEventType);
 	},
 	teardown: function () {
 		this.removeEvent();
@@ -66,7 +67,7 @@ var rawNewDomEvents = {
 	name: 'plain with can-dom-events',
 	domEvents: domEvents,
 	setup: function () {
-		this.removeEvent = domEvents.addEvent(definition);
+		this.removeEvent = domEvents.addEvent(definition, enterEventType);
 	},
 	teardown: function () {
 		this.removeEvent();
@@ -89,7 +90,7 @@ function runTests (mod) {
 	unit.test("calls enter event handler when enter key is pressed", function (assert) {
 		assert.expect(1);
 		var input = document.createElement("input");
-		domEvents.addEventListener(input, "enter", function() {
+		domEvents.addEventListener(input, enterEventType, function() {
 			assert.ok(true, "enter key detected");
 		});
 		pressEnter(input);
@@ -99,7 +100,8 @@ function runTests (mod) {
 		unit.test("works for KeyboardEvent's", function(assert) {
 			assert.expect(1);
 			var input = document.createElement("input");
-			domEvents.addEventListener(input, "enter", function() {
+			domEvents.addEventListener(input, enterEventType, function handler() {
+				domEvents.removeEventListener(input, enterEventType, handler);
 				assert.ok(true, "enter key detected");
 			});
 			domEvents.dispatch(input, makeEnterEvent());
@@ -109,7 +111,8 @@ function runTests (mod) {
 	unit.test("does not call enter event handler when a different key is pressed", function(assert) {
 		assert.expect(1);
 		var input = document.createElement("input");
-		domEvents.addEventListener(input, "enter", function() {
+		domEvents.addEventListener(input, enterEventType, function handler() {
+			domEvents.removeEventListener(input, enterEventType, handler);
 			assert.ok(true, 'passed');
 		});
 		pressKey(input, 27); // not enter
@@ -122,9 +125,9 @@ function runTests (mod) {
 		var enterEventHandler = function() {
 			assert.ok(true);
 		};
-		domEvents.addEventListener(input, "enter", enterEventHandler);
+		domEvents.addEventListener(input, enterEventType, enterEventHandler);
 		pressEnter(input);
-		domEvents.removeEventListener(input, "enter", enterEventHandler);
+		domEvents.removeEventListener(input, enterEventType, enterEventHandler);
 		pressEnter(input);
 	});
 
@@ -139,16 +142,16 @@ function runTests (mod) {
 		};
 		var firstEvtHandler = generateEvtHandler();
 		var secondEvtHandler = generateEvtHandler();
-		domEvents.addEventListener(input, "enter", firstEvtHandler);
-		domEvents.addEventListener(input, "enter", secondEvtHandler);
+		domEvents.addEventListener(input, enterEventType, firstEvtHandler);
+		domEvents.addEventListener(input, enterEventType, secondEvtHandler);
 
 		pressEnter(input); // +2
 		pressEnter(input); // +2
 
-		domEvents.removeEventListener(input, "enter", firstEvtHandler);
+		domEvents.removeEventListener(input, enterEventType, firstEvtHandler);
 		pressEnter(input); // +1
 
-		domEvents.removeEventListener(input, "enter", secondEvtHandler);
+		domEvents.removeEventListener(input, enterEventType, secondEvtHandler);
 		pressEnter(input); // +0
 	});
 
