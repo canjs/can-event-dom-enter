@@ -1,32 +1,11 @@
 'use strict';
 
-var domData = require('can-dom-data-state');
-var canCid = require("can-cid");
-
 var baseEventType = 'keyup';
 
 function isEnterEvent (event) {
 	var hasEnterKey = event.key === 'Enter';
 	var hasEnterCode = event.keyCode === 13;
 	return hasEnterKey || hasEnterCode;
-}
-
-function getHandlerKey (eventType, handler) {
-	return eventType + ':' + canCid(handler);
-}
-
-function associateHandler (target, eventType, handler, otherHandler) {
-	var key = getHandlerKey(eventType, handler);
-	domData.set.call(target, key, otherHandler);
-}
-
-function disassociateHandler (target, eventType, handler) {
-	var key = getHandlerKey(eventType, handler);
-	var otherHandler = domData.get.call(target, key);
-	if (otherHandler) {
-		domData.clean.call(target, key);
-	}
-	return otherHandler;
 }
 
 /**
@@ -55,7 +34,7 @@ function disassociateHandler (target, eventType, handler) {
  * });
  * ```
  */
-module.exports = {
+var enterEvent = {
 	defaultEventType: 'enter',
 
 	addEventListener: function (target, eventType, handler) {
@@ -65,14 +44,31 @@ module.exports = {
 			}
 		};
 
-		associateHandler(target, eventType, handler, keyHandler);
+		var handlerMap = enterEvent._eventTypeHandlerMap[eventType];
+		if (!handlerMap) {
+			handlerMap = enterEvent._eventTypeHandlerMap[eventType] = new Map();
+		}
+
+		handlerMap.set(handler, keyHandler);
 		this.addEventListener(target, baseEventType, keyHandler);
 	},
 
 	removeEventListener: function (target, eventType, handler) {
-		var keyHandler = disassociateHandler(target, eventType, handler);
-		if (keyHandler) {
-			this.removeEventListener(target,baseEventType, keyHandler);
+		var handlerMap = enterEvent._eventTypeHandlerMap[eventType];
+		if (handlerMap) {
+			var keyHandler = handlerMap.get(handler);
+			if (keyHandler) {
+				handlerMap.delete(handler);
+				if (handlerMap.size === 0) {
+					delete enterEvent._eventTypeHandlerMap[eventType];
+				}
+				this.removeEventListener(target, baseEventType, keyHandler);
+			}
 		}
-	}
+	},
+
+	// {[eventType: string]: WeakMap<OriginalHandler, KeyEventHandler>}
+	_eventTypeHandlerMap: {}
 };
+
+module.exports = enterEvent;
