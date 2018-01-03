@@ -4,7 +4,7 @@ var unit = require('steal-qunit');
 var domEvents = require('can-dom-events');
 var definition = require('./can-event-dom-enter');
 var compat = require('./compat');
-var enterEventType = 'enter';
+var enterEventType = 'test-enter';
 
 function makeEnterEvent() {
 	try {
