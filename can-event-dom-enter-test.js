@@ -4,6 +4,7 @@ var unit = require('steal-qunit');
 var domEvents = require('can-dom-events');
 var definition = require('./can-event-dom-enter');
 var compat = require('./compat');
+var canNamespace = require('can-namespace');
 var enterEventType = 'test-enter';
 
 function makeEnterEvent() {
@@ -184,4 +185,8 @@ unit.test("can use custom addEventListener and removeEventListener (#3)", functi
 			assert.ok(true, "called custom removeEventListener");
 		}
 	},button,"enter", handler);
+});
+
+unit.test("adds event to can-namespace", function(assert) {
+	assert.equal(canNamespace.domEventEnter, definition, "event is added");
 });

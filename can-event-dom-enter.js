@@ -1,4 +1,5 @@
 'use strict';
+var namespace = require('can-namespace');
 
 var baseEventType = 'keyup';
 
@@ -71,4 +72,4 @@ var enterEvent = {
 	_eventTypeHandlerMap: {}
 };
 
-module.exports = enterEvent;
+module.exports = namespace.domEventEnter = enterEvent;
