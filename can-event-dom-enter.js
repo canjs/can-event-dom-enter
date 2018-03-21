@@ -13,6 +13,7 @@ function isEnterEvent (event) {
  * @module {events} can-event-dom-enter
  * @parent can-dom-utilities
  * @collection can-infrastructure
+ * @group can-event-dom-enter.modules modules
  * @package ./package.json
  *
  * Watch for when enter keys are pressed on a DomEventTarget.
