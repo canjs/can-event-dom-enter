@@ -1,6 +1,6 @@
 'use strict';
 
-var unit = require('steal-qunit');
+var QUnit = require('steal-qunit');
 var domEvents = require('can-dom-events');
 var definition = require('./can-event-dom-enter');
 var compat = require('./compat');
@@ -81,14 +81,14 @@ var suites = [
 ];
 
 function runTests (mod) {
-	unit.module(mod.name, {
-		setup: mod.setup,
-		teardown: mod.teardown
+	QUnit.module(mod.name, {
+		beforeEach: mod.setup,
+		afterEach: mod.teardown
 	});
 
 	var domEvents = mod.domEvents;
 
-	unit.test("calls enter event handler when enter key is pressed", function (assert) {
+	QUnit.test("calls enter event handler when enter key is pressed", function (assert) {
 		assert.expect(1);
 		var input = document.createElement("input");
 		domEvents.addEventListener(input, enterEventType, function() {
@@ -98,7 +98,7 @@ function runTests (mod) {
 	});
 
 	if (supportsKeyboardEvents) {
-		unit.test("works for KeyboardEvent's", function(assert) {
+		QUnit.test("works for KeyboardEvent's", function(assert) {
 			assert.expect(1);
 			var input = document.createElement("input");
 			domEvents.addEventListener(input, enterEventType, function handler() {
@@ -109,7 +109,7 @@ function runTests (mod) {
 		});
 	}
 
-	unit.test("does not call enter event handler when a different key is pressed", function(assert) {
+	QUnit.test("does not call enter event handler when a different key is pressed", function(assert) {
 		assert.expect(1);
 		var input = document.createElement("input");
 		domEvents.addEventListener(input, enterEventType, function handler() {
@@ -120,7 +120,7 @@ function runTests (mod) {
 		pressEnter(input);
 	});
 
-	unit.test("successfully removes enter event handler", function(assert) {
+	QUnit.test("successfully removes enter event handler", function(assert) {
 		assert.expect(1);
 		var input = document.createElement("input");
 		var enterEventHandler = function() {
@@ -132,7 +132,7 @@ function runTests (mod) {
 		pressEnter(input);
 	});
 
-	unit.test("can have multiple enter event handlers and can remove them seperately", function(assert) {
+	QUnit.test("can have multiple enter event handlers and can remove them seperately", function(assert) {
 		assert.expect(5);
 
 		var input = document.createElement("input");
@@ -156,7 +156,7 @@ function runTests (mod) {
 		pressEnter(input); // +0
 	});
 
-	unit.test("still handles other event types appropriately", function(assert) {
+	QUnit.test("still handles other event types appropriately", function(assert) {
 		assert.expect(1);
 		var button = document.createElement("button");
 		domEvents.addEventListener(button, "focus", function() {
@@ -168,9 +168,9 @@ function runTests (mod) {
 
 suites.forEach(runTests);
 
-unit.module("can-event-dom-enter plain");
+QUnit.module("can-event-dom-enter plain");
 
-unit.test("can use custom addEventListener and removeEventListener (#3)", function(assert){
+QUnit.test("can use custom addEventListener and removeEventListener (#3)", function(assert){
 	assert.expect(2);
 	var handler = function(){};
 	var button = document.createElement("button");
@@ -187,6 +187,6 @@ unit.test("can use custom addEventListener and removeEventListener (#3)", functi
 	},button,"enter", handler);
 });
 
-unit.test("adds event to can-namespace", function(assert) {
+QUnit.test("adds event to can-namespace", function(assert) {
 	assert.equal(canNamespace.domEventEnter, definition, "event is added");
 });
