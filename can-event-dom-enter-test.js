@@ -56,10 +56,10 @@ var supportsKeyboardEvents = (function () {
 var compatWithNew = {
 	name: 'compat with can-dom-events',
 	domEvents: domEvents,
-	setup: function () {
+	beforeEach: function () {
 		this.removeEvent = compat(domEvents, enterEventType);
 	},
-	teardown: function () {
+	afterEach: function () {
 		this.removeEvent();
 	}
 };
@@ -67,10 +67,10 @@ var compatWithNew = {
 var rawNewDomEvents = {
 	name: 'plain with can-dom-events',
 	domEvents: domEvents,
-	setup: function () {
+	beforeEach: function () {
 		this.removeEvent = domEvents.addEvent(definition, enterEventType);
 	},
-	teardown: function () {
+	afterEach: function () {
 		this.removeEvent();
 	}
 };
@@ -82,8 +82,8 @@ var suites = [
 
 function runTests (mod) {
 	unit.module(mod.name, {
-		setup: mod.setup,
-		teardown: mod.teardown
+		beforeEach: mod.beforeEach,
+		afterEach: mod.afterEach
 	});
 
 	var domEvents = mod.domEvents;
